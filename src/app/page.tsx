@@ -1,103 +1,77 @@
-import Image from "next/image";
+import Link from "next/link";
+import { posts, site, socials } from "@/data/site";
+import Section from "@/components/Section";
+import Gallery from "@/components/Gallery";
+import PostList from "@/components/PostList";
+import WorkList from "@/components/WorkList";
+import Newsletter from "@/components/Newsletter";
+import { ArrowUpRightIcon, socialIcons } from "@/components/Icons";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const recent = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="flex flex-col gap-16 md:gap-24">
+      <Section index={0} className="flex flex-col items-center gap-8 text-center sm:items-start sm:text-left">
+        {/* The header renders the avatar here and shrinks it into the nav on scroll */}
+        <div id="hero-avatar" className="size-16" aria-hidden />
+        <h1 className="text-4xl leading-[1.1] font-bold tracking-tight sm:text-5xl">{site.headline}</h1>
+        <p className="text-lg leading-relaxed text-secondary">
+          {site.intro.map((part, i) =>
+            typeof part === "string" ? (
+              part
+            ) : (
+              <Link
+                key={i}
+                href={part.href}
+                className="text-primary/90 underline decoration-accent/60 decoration-1 underline-offset-[5px] transition-colors hover:text-accent hover:decoration-accent"
+              >
+                {part.text}
+              </Link>
+            )
+          )}
+        </p>
+        <ul className="flex justify-center gap-6 sm:justify-start">
+          {socials.map((s) => {
+            const Icon = socialIcons[s.icon];
+            return (
+              <li key={s.name}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.name}
+                  className="text-secondary transition-colors hover:text-accent"
+                >
+                  <Icon width={22} height={22} />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </Section>
+
+      <Section index={1}>
+        <Gallery />
+      </Section>
+
+      <Section index={2}>
+        <div className="mb-4 flex flex-col items-center gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+          <h2 className="text-sm font-medium text-secondary">Recent posts</h2>
+          <Link href="/posts" className="inline-flex items-center gap-1 text-sm text-secondary hover:text-accent">
+            All posts <ArrowUpRightIcon width={14} height={14} />
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <PostList posts={recent} />
+      </Section>
+
+      <Section index={3}>
+        <Newsletter />
+      </Section>
+
+      <Section index={4} title="Work">
+        <WorkList />
+      </Section>
     </div>
   );
 }

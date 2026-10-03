@@ -1,26 +1,91 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-bg: var(--bg);
+  --color-outer: var(--outer);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --outer: #f4f4f5;
+  --bg: #ffffff;
+  --surface: #f4f4f5;
+  --line: #e4e4e7;
+  --primary: #18181b;
+  --secondary: #71717a;
+  --tertiary: #a1a1aa;
+  /* Sampled from the coral -> amber gradient in the profile photo */
+  --grad-from: #f7616e;
+  --grad-to: #fbb040;
+  --accent: #dc4a3d; /* darker coral so text passes contrast on white */
+  --accent-soft: #fdebe6;
+}
+
+.dark {
+  --outer: #000000;
+  --bg: #161616;
+  --surface: #1f1f1f;
+  --line: #2c2c2c;
+  --primary: #f4f4f5;
+  --secondary: #a1a1aa;
+  --tertiary: #71717a;
+  --grad-from: #f87171;
+  --grad-to: #fbbf24;
+  --accent: #fb8a6b;
+  --accent-soft: #2a1714;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--outer);
+  color: var(--primary);
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--grad-from) 30%, transparent);
+}
+
+/* Staggered fade-in on page load, like b-r.io. Set --index on each child. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.animate-in {
+  animation: enter 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  animation-delay: calc(var(--index, 0) * 120ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    animation: none;
+  }
+}
+
+.text-gradient {
+  background: linear-gradient(110deg, var(--grad-from), var(--grad-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, var(--grad-from), var(--grad-to));
 }
